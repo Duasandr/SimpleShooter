@@ -3,6 +3,10 @@
 
 #include "ShooterCharacter.h"
 
+#include "EnhancedInputComponent.h"
+#include "Components/InputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
 // Sets default values
 AShooterCharacter::AShooterCharacter()
 {
@@ -15,6 +19,14 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (APlayerController const * PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(InputMapping, 0);
+		}
+	}
 	
 }
 
@@ -30,5 +42,28 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+
+	EnhancedInputComponent->BindAction(
+		MoveForwardInput,
+		ETriggerEvent::Triggered,
+		this,
+		&AShooterCharacter::MoveForward
+		);
+	EnhancedInputComponent->BindAction(
+		LookUpInput,
+		ETriggerEvent::Triggered,
+		this,
+		&AShooterCharacter::LookUp);
+}
+
+void AShooterCharacter::MoveForward(FInputActionValue const& ActionValue)
+{
+	UE_LOG(LogTemp, Display, TEXT("Move Forward"));
+}
+
+void AShooterCharacter::LookUp(FInputActionValue const& ActionValue)
+{
+	UE_LOG(LogTemp, Display, TEXT("Look Forward"));
 }
 
