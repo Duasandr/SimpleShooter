@@ -51,19 +51,43 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		&AShooterCharacter::MoveForward
 		);
 	EnhancedInputComponent->BindAction(
+		MoveRightInput,
+		ETriggerEvent::Triggered,
+		this,
+		&AShooterCharacter::MoveRight
+		);
+	EnhancedInputComponent->BindAction(
 		LookUpInput,
 		ETriggerEvent::Triggered,
 		this,
 		&AShooterCharacter::LookUp);
+	EnhancedInputComponent->BindAction(
+		LookRightInput,
+		ETriggerEvent::Triggered,
+		this,
+		&AShooterCharacter::LookRight
+		);
 }
 
 void AShooterCharacter::MoveForward(FInputActionValue const& ActionValue)
 {
-	UE_LOG(LogTemp, Display, TEXT("Move Forward"));
+	AddMovementInput( GetActorForwardVector() * ActionValue.GetMagnitude() );	
+}
+
+void AShooterCharacter::MoveRight(FInputActionValue const& ActionValue)
+{
+	AddMovementInput( GetActorRightVector() * ActionValue.GetMagnitude() );
 }
 
 void AShooterCharacter::LookUp(FInputActionValue const& ActionValue)
 {
-	UE_LOG(LogTemp, Display, TEXT("Look Forward"));
+	AddControllerPitchInput(ActionValue.GetMagnitude());
 }
+
+void AShooterCharacter::LookRight(FInputActionValue const& ActionValue)
+{
+	AddControllerYawInput(ActionValue.GetMagnitude());	
+}
+
+
 

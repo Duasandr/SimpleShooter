@@ -34,8 +34,20 @@ private:
 	class UInputAction * MoveForwardInput;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
+	UInputAction * MoveRightInput;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
 	UInputAction * LookUpInput;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
+	UInputAction * LookRightInput;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimationAsset* AnimationAsset;
+	
 	void MoveForward(struct FInputActionValue const & ActionValue);
+	void MoveRight(FInputActionValue const & ActionValue);
 	void LookUp(FInputActionValue const & ActionValue);
+	void LookRight(FInputActionValue const & ActionValue);
+	
 };
