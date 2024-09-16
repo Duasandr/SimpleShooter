@@ -21,10 +21,9 @@ void AShooterCharacter::BeginPlay()
 
 	if ( APlayerController const* PlayerController = Cast< APlayerController >( Controller ) )
 	{
-		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
-			UEnhancedInputLocalPlayerSubsystem >( PlayerController->GetLocalPlayer() ) )
+		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem >( PlayerController->GetLocalPlayer() ) )
 		{
-			Subsystem->AddMappingContext( InputMapping, 0 );
+			Subsystem->AddMappingContext( InputMappingContext, 0 );
 		}
 	}
 }
@@ -41,39 +40,36 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent( PlayerInputComponent );
 
 	UEnhancedInputComponent* EnhancedInputComponent = Cast< UEnhancedInputComponent >( PlayerInputComponent );
-
-	EnhancedInputComponent->BindAction(
-		MoveForwardInput, ETriggerEvent::Triggered, this, &AShooterCharacter::MoveForward );
-
-	EnhancedInputComponent->BindAction(
-		MoveRightInput, ETriggerEvent::Triggered, this, &AShooterCharacter::MoveRight );
-
-	EnhancedInputComponent->BindAction(
-		LookUpInput, ETriggerEvent::Triggered, this, &AShooterCharacter::LookUp );
-
-	EnhancedInputComponent->BindAction(
-		LookRightInput, ETriggerEvent::Triggered, this, &AShooterCharacter::LookRight );
-
-	EnhancedInputComponent->BindAction(
-		JumpInput, ETriggerEvent::Triggered, this, &ACharacter::Jump );
+	if ( EnhancedInputComponent )
+	{
+		EnhancedInputComponent->BindAction( MoveAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Move );
+		EnhancedInputComponent->BindAction( LookAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Look );
+		EnhancedInputComponent->BindAction( JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump );
+	}
 }
 
-void AShooterCharacter::MoveForward(FInputActionValue const& ActionValue)
+void AShooterCharacter::Move(FInputActionValue const& ActionValue)
 {
-	AddMovementInput( GetActorForwardVector() * ActionValue.GetMagnitude() );
+	FVector2d const MovementVector = ActionValue.Get<FVector2d>();
+	if ( Controller )
+	{
+		// find the right and forward vectors of the controller by using rotation matrices
+		FRotator const ControlRotation = Controller->GetControlRotation();
+		FRotator const YawRotation = FRotator(0.0, ControlRotation.Yaw, 0.0);
+		FVector  const ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis( EAxis::X );
+		FVector  const RightDirection	= FRotationMatrix(YawRotation).GetUnitAxis( EAxis::Y );
+
+		AddMovementInput( ForwardDirection, MovementVector.Y );	// move forward/backwards
+		AddMovementInput( RightDirection, MovementVector.X );	// move left/right
+	}
 }
 
-void AShooterCharacter::MoveRight(FInputActionValue const& ActionValue)
+void AShooterCharacter::Look(FInputActionValue const& ActionValue)
 {
-	AddMovementInput( GetActorRightVector() * ActionValue.GetMagnitude() );
-}
-
-void AShooterCharacter::LookUp(FInputActionValue const& ActionValue)
-{
-	AddControllerPitchInput( ActionValue.GetMagnitude() );
-}
-
-void AShooterCharacter::LookRight(FInputActionValue const& ActionValue)
-{
-	AddControllerYawInput( ActionValue.GetMagnitude() );
+	FVector2D const LookAxis = ActionValue.Get<FVector2D>();
+	if ( Controller )
+	{
+		AddControllerYawInput( LookAxis.X );	// look left/right
+		AddControllerPitchInput( LookAxis.Y );  // look up/down
+	}
 }
