@@ -10,9 +10,8 @@
 // Sets default values
 AShooterCharacter::AShooterCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -20,58 +19,48 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (APlayerController const * PlayerController = Cast<APlayerController>(Controller))
+	if ( APlayerController const* PlayerController = Cast< APlayerController >( Controller ) )
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem >( PlayerController->GetLocalPlayer() ) )
 		{
-			Subsystem->AddMappingContext(InputMapping, 0);
+			Subsystem->AddMappingContext( InputMapping, 0 );
 		}
 	}
-	
 }
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
+	Super::Tick( DeltaTime );
 }
 
 // Called to bind functionality to input
 void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::SetupPlayerInputComponent( PlayerInputComponent );
 
-	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	UEnhancedInputComponent* EnhancedInputComponent = Cast< UEnhancedInputComponent >( PlayerInputComponent );
 
 	EnhancedInputComponent->BindAction(
-		MoveForwardInput,
-		ETriggerEvent::Triggered,
-		this,
-		&AShooterCharacter::MoveForward
-		);
+		MoveForwardInput, ETriggerEvent::Triggered, this, &AShooterCharacter::MoveForward );
+
 	EnhancedInputComponent->BindAction(
-		MoveRightInput,
-		ETriggerEvent::Triggered,
-		this,
-		&AShooterCharacter::MoveRight
-		);
+		MoveRightInput, ETriggerEvent::Triggered, this, &AShooterCharacter::MoveRight );
+
 	EnhancedInputComponent->BindAction(
-		LookUpInput,
-		ETriggerEvent::Triggered,
-		this,
-		&AShooterCharacter::LookUp);
+		LookUpInput, ETriggerEvent::Triggered, this, &AShooterCharacter::LookUp );
+
 	EnhancedInputComponent->BindAction(
-		LookRightInput,
-		ETriggerEvent::Triggered,
-		this,
-		&AShooterCharacter::LookRight
-		);
+		LookRightInput, ETriggerEvent::Triggered, this, &AShooterCharacter::LookRight );
+
+	EnhancedInputComponent->BindAction(
+		JumpInput, ETriggerEvent::Triggered, this, &ACharacter::Jump );
 }
 
 void AShooterCharacter::MoveForward(FInputActionValue const& ActionValue)
 {
-	AddMovementInput( GetActorForwardVector() * ActionValue.GetMagnitude() );	
+	AddMovementInput( GetActorForwardVector() * ActionValue.GetMagnitude() );
 }
 
 void AShooterCharacter::MoveRight(FInputActionValue const& ActionValue)
@@ -81,13 +70,10 @@ void AShooterCharacter::MoveRight(FInputActionValue const& ActionValue)
 
 void AShooterCharacter::LookUp(FInputActionValue const& ActionValue)
 {
-	AddControllerPitchInput(ActionValue.GetMagnitude());
+	AddControllerPitchInput( ActionValue.GetMagnitude() );
 }
 
 void AShooterCharacter::LookRight(FInputActionValue const& ActionValue)
 {
-	AddControllerYawInput(ActionValue.GetMagnitude());	
+	AddControllerYawInput( ActionValue.GetMagnitude() );
 }
-
-
-
