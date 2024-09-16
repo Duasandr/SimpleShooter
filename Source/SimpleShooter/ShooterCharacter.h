@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -27,27 +27,26 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	class UInputMappingContext *  InputMapping;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	class UInputAction * MoveForwardInput;
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input" )
+	class UInputMappingContext* InputMapping;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	UInputAction * MoveRightInput;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	UInputAction * LookUpInput;
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	class UInputAction* MoveForwardInput;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	UInputAction * LookRightInput;
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	UInputAction* MoveRightInput;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-	UAnimationAsset* AnimationAsset;
-	
-	void MoveForward(struct FInputActionValue const & ActionValue);
-	void MoveRight(FInputActionValue const & ActionValue);
-	void LookUp(FInputActionValue const & ActionValue);
-	void LookRight(FInputActionValue const & ActionValue);
-	
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	UInputAction* LookUpInput;
+
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	UInputAction* LookRightInput;
+
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	UInputAction* JumpInput;
+
+	void MoveForward(struct FInputActionValue const& ActionValue);
+	void MoveRight	(FInputActionValue const& ActionValue);
+	void LookUp		(FInputActionValue const& ActionValue);
+	void LookRight	(FInputActionValue const& ActionValue);
 };
