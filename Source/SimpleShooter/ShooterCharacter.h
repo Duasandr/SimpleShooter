@@ -27,18 +27,30 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input" )
+
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input" )
 	class UInputMappingContext* InputMappingContext;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	class UInputAction* MoveAction;
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls" )
+	class UInputAction* LookAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	UInputAction* LookAction;
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls|Gamepad" )
+	UInputAction* LookRateAction;
+	
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls|Gamepad")
+	FVector2D LookAxisRotationRate = FVector2D::One();
 
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
+	UInputAction* MoveAction;
+
+	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement Controls" )
 	UInputAction* JumpAction;
 
 	void Move(struct FInputActionValue const& ActionValue);
 	void Look		(FInputActionValue const& ActionValue);
+	/**
+	 * Adjusts looking around with the controller by taking into account the frame rate.
+	 * @param ActionValue Value passed by enhanced input
+	 */
+	void LookRate(FInputActionValue const& ActionValue);
 };

@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -42,8 +43,14 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	UEnhancedInputComponent* EnhancedInputComponent = Cast< UEnhancedInputComponent >( PlayerInputComponent );
 	if ( EnhancedInputComponent )
 	{
+		if (!(MoveAction && LookAction && LookRateAction && JumpAction))
+		{
+			return;
+		}
+		
 		EnhancedInputComponent->BindAction( MoveAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Move );
 		EnhancedInputComponent->BindAction( LookAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Look );
+		EnhancedInputComponent->BindAction( LookRateAction, ETriggerEvent::Triggered, this, &AShooterCharacter::LookRate );
 		EnhancedInputComponent->BindAction( JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump );
 	}
 }
@@ -72,4 +79,12 @@ void AShooterCharacter::Look(FInputActionValue const& ActionValue)
 		AddControllerYawInput( LookAxis.X );	// look left/right
 		AddControllerPitchInput( LookAxis.Y );  // look up/down
 	}
+}
+
+void AShooterCharacter::LookRate(FInputActionValue const& ActionValue)
+{
+	float	  const DeltaTime    = UGameplayStatics::GetWorldDeltaSeconds( this );
+	FVector2D const AxisValue    = ActionValue.Get<FVector2D>();
+	FVector2D const NewAxisValue = AxisValue * LookAxisRotationRate * DeltaTime;
+	Look( NewAxisValue );
 }
