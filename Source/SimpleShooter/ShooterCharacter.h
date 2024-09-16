@@ -28,25 +28,17 @@ public:
 
 private:
 	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input" )
-	class UInputMappingContext* InputMapping;
+	class UInputMappingContext* InputMappingContext;
 
 	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	class UInputAction* MoveForwardInput;
+	class UInputAction* MoveAction;
 
 	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	UInputAction* MoveRightInput;
+	UInputAction* LookAction;
 
 	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	UInputAction* LookUpInput;
+	UInputAction* JumpAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	UInputAction* LookRightInput;
-
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement" )
-	UInputAction* JumpInput;
-
-	void MoveForward(struct FInputActionValue const& ActionValue);
-	void MoveRight	(FInputActionValue const& ActionValue);
-	void LookUp		(FInputActionValue const& ActionValue);
-	void LookRight	(FInputActionValue const& ActionValue);
+	void Move(struct FInputActionValue const& ActionValue);
+	void Look		(FInputActionValue const& ActionValue);
 };
