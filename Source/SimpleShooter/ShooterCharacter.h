@@ -43,7 +43,7 @@ private:
 	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
 	UInputAction* MoveAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Enhanced Input|Movement Controls" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
 	UInputAction* JumpAction;
 
 	void Move(struct FInputActionValue const& ActionValue);
