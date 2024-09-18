@@ -9,6 +9,13 @@ AGun::AGun()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// memory allocation
+	Root		 = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>( TEXT("Skeletal Mesh") );
+
+	// attachments
+	RootComponent = Root;
+	SkeletalMesh->SetupAttachment( Root );
 }
 
 // Called when the game starts or when spawned
