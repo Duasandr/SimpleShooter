@@ -31,22 +31,25 @@ private:
 	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input" )
 	class UInputMappingContext* InputMappingContext;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Actions" )
 	class UInputAction* LookAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls|Gamepad" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Actions" )
 	UInputAction* LookRateAction;
 	
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Look Controls|Gamepad")
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay| Gamepad")
 	FVector2D LookAxisRotationRate = FVector2D::One();
 
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Actions" )
 	UInputAction* MoveAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Actions" )
 	UInputAction* JumpAction;
 
-	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Combat" )
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Actions" )
+	UInputAction* FireGunAction;
+
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay| Combat" )
 	TSubclassOf<class AGun> GunClass;
 
 	UPROPERTY()
@@ -59,4 +62,6 @@ private:
 	 * @param ActionValue Value passed by enhanced input
 	 */
 	void LookRate(FInputActionValue const& ActionValue);
+
+	void FireGun(); 
 };
