@@ -46,6 +46,12 @@ private:
 	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input|Movement Controls" )
 	UInputAction* JumpAction;
 
+	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Combat" )
+	TSubclassOf<class AGun> GunClass;
+
+	UPROPERTY()
+	AGun* Gun;
+
 	void Move(struct FInputActionValue const& ActionValue);
 	void Look		(FInputActionValue const& ActionValue);
 	/**
