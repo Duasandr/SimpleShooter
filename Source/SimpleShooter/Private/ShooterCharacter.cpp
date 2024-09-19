@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Gun.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -27,6 +28,12 @@ void AShooterCharacter::BeginPlay()
 			Subsystem->AddMappingContext( InputMappingContext, 0 );
 		}
 	}
+	
+	if ( GetWorld() && GunClass )
+	{
+		Gun = GetWorld()->SpawnActor< AGun >( GunClass, GetActorLocation(), GetActorRotation() );
+	}
+	
 }
 
 // Called every frame
