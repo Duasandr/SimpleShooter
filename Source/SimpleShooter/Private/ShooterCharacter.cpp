@@ -29,9 +29,15 @@ void AShooterCharacter::BeginPlay()
 		}
 	}
 	
-	if ( GetWorld() && GunClass )
+	if ( GetWorld() &&  GetMesh() && GunClass )
 	{
-		Gun = GetWorld()->SpawnActor< AGun >( GunClass, GetActorLocation(), GetActorRotation() );
+		GetMesh()->HideBoneByName( TEXT( "weapon_r" ), PBO_None );
+
+		Gun = GetWorld()->SpawnActor< AGun >( GunClass );
+
+		FAttachmentTransformRules const TransformRule = FAttachmentTransformRules::KeepRelativeTransform;
+		Gun->AttachToComponent( GetMesh(), TransformRule, TEXT( "gun_socket" ) );
+		Gun->SetOwner( this );
 	}
 	
 }
