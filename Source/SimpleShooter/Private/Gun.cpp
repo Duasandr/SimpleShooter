@@ -3,6 +3,10 @@
 
 #include "Gun.h"
 
+#include "HairStrandsInterface.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AGun::AGun()
 {
@@ -10,7 +14,7 @@ AGun::AGun()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// memory allocation
-	Root		 = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Root         = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>( TEXT("Skeletal Mesh") );
 
 	// attachments
@@ -34,6 +38,9 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
-	UE_LOG(LogTemp, Display, TEXT("Pull Trigger"));
+	if ( MuzzleFlash )
+	{
+		UGameplayStatics::SpawnEmitterAttached( MuzzleFlash, SkeletalMesh, TEXT("MuzzleFlashSocket") );
+	}
 }
 
