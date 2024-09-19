@@ -56,7 +56,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	UEnhancedInputComponent* EnhancedInputComponent = Cast< UEnhancedInputComponent >( PlayerInputComponent );
 	if ( EnhancedInputComponent )
 	{
-		if (!(MoveAction && LookAction && LookRateAction && JumpAction))
+		if (!(MoveAction && LookAction && LookRateAction && JumpAction && FireGunAction))
 		{
 			return;
 		}
@@ -65,6 +65,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction( LookAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Look );
 		EnhancedInputComponent->BindAction( LookRateAction, ETriggerEvent::Triggered, this, &AShooterCharacter::LookRate );
 		EnhancedInputComponent->BindAction( JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump );
+		EnhancedInputComponent->BindAction( FireGunAction, ETriggerEvent::Triggered, this, &AShooterCharacter::FireGun );
 	}
 }
 
@@ -100,4 +101,9 @@ void AShooterCharacter::LookRate(FInputActionValue const& ActionValue)
 	FVector2D const AxisValue    = ActionValue.Get<FVector2D>();
 	FVector2D const NewAxisValue = AxisValue * LookAxisRotationRate * DeltaTime;
 	Look( NewAxisValue );
+}
+
+void AShooterCharacter::FireGun() 
+{
+	Gun->PullTrigger();
 }
