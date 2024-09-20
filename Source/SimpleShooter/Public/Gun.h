@@ -10,8 +10,8 @@ UCLASS()
 class SIMPLESHOOTER_API AGun : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AGun();
 
@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -32,6 +32,15 @@ private:
 	UPROPERTY( VisibleAnywhere )
 	USkeletalMeshComponent* SkeletalMesh;
 
-	UPROPERTY( EditAnywhere , Category = "Combat")
+	UPROPERTY( EditAnywhere, Category = "Combat", meta = (ClampMin = "1.0") )
+	float Range = 100.0f;
+
+	UPROPERTY( EditAnywhere, Category = "Combat", meta = (ClampMin = "1.0") )
+	float HitRadius = 1.0f;
+
+	UPROPERTY( EditAnywhere, Category = "Combat" )
 	UParticleSystem* MuzzleFlash;
+
+	UPROPERTY( EditAnywhere, Category = "Combat" )
+	UParticleSystem* HitParticle;
 };
