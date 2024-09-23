@@ -21,15 +21,18 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Health = MaxHealth;
+
 	if ( APlayerController const* PlayerController = Cast< APlayerController >( Controller ) )
 	{
-		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem >( PlayerController->GetLocalPlayer() ) )
+		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem >( PlayerController->GetLocalPlayer() ) )
 		{
 			Subsystem->AddMappingContext( InputMappingContext, 0 );
 		}
 	}
-	
-	if ( GetWorld() &&  GetMesh() && GunClass )
+
+	if ( GetWorld() && GetMesh() && GunClass )
 	{
 		GetMesh()->HideBoneByName( TEXT( "weapon_r" ), PBO_None );
 
@@ -39,7 +42,6 @@ void AShooterCharacter::BeginPlay()
 		Gun->AttachToComponent( GetMesh(), TransformRule, TEXT( "gun_socket" ) );
 		Gun->SetOwner( this );
 	}
-	
 }
 
 // Called every frame
@@ -56,54 +58,71 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	UEnhancedInputComponent* EnhancedInputComponent = Cast< UEnhancedInputComponent >( PlayerInputComponent );
 	if ( EnhancedInputComponent )
 	{
-		if (!(MoveAction && LookAction && LookRateAction && JumpAction && FireGunAction))
+		if ( !( MoveAction && LookAction && LookRateAction && JumpAction && FireGunAction ) )
 		{
 			return;
 		}
-		
+
 		EnhancedInputComponent->BindAction( MoveAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Move );
 		EnhancedInputComponent->BindAction( LookAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Look );
-		EnhancedInputComponent->BindAction( LookRateAction, ETriggerEvent::Triggered, this, &AShooterCharacter::LookRate );
+		EnhancedInputComponent->BindAction( LookRateAction, ETriggerEvent::Triggered, this,
+		                                    &AShooterCharacter::LookRate );
 		EnhancedInputComponent->BindAction( JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump );
-		EnhancedInputComponent->BindAction( FireGunAction, ETriggerEvent::Triggered, this, &AShooterCharacter::FireGun );
+		EnhancedInputComponent->BindAction( FireGunAction, ETriggerEvent::Triggered, this,
+		                                    &AShooterCharacter::FireGun );
 	}
+}
+
+float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+                                    class AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageReceived = Super::TakeDamage( DamageAmount, DamageEvent, EventInstigator, DamageCauser );
+
+	if ( DamageReceived > 0.0f && Health > 0.0f )
+	{
+		Health -= DamageReceived;
+		UE_LOG(LogTemp, Warning, TEXT("Damage: %f"), DamageReceived);
+		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	}
+
+	return DamageReceived;
 }
 
 void AShooterCharacter::Move(FInputActionValue const& ActionValue)
 {
-	FVector2d const MovementVector = ActionValue.Get<FVector2d>();
+	FVector2d const MovementVector = ActionValue.Get< FVector2d >();
 	if ( Controller )
 	{
 		// find the right and forward vectors of the controller by using rotation matrices
 		FRotator const ControlRotation = Controller->GetControlRotation();
-		FRotator const YawRotation = FRotator(0.0, ControlRotation.Yaw, 0.0);
-		FVector  const ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis( EAxis::X );
-		FVector  const RightDirection	= FRotationMatrix(YawRotation).GetUnitAxis( EAxis::Y );
+		FRotator const YawRotation = FRotator( 0.0, ControlRotation.Yaw, 0.0 );
+		FVector const ForwardDirection = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+		FVector const RightDirection = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
 
-		AddMovementInput( ForwardDirection, MovementVector.Y );	// move forward/backwards
-		AddMovementInput( RightDirection, MovementVector.X );	// move left/right
+		AddMovementInput( ForwardDirection, MovementVector.Y ); // move forward/backwards
+		AddMovementInput( RightDirection, MovementVector.X ); // move left/right
 	}
 }
 
 void AShooterCharacter::Look(FInputActionValue const& ActionValue)
 {
-	FVector2D const LookAxis = ActionValue.Get<FVector2D>();
+	FVector2D const LookAxis = ActionValue.Get< FVector2D >();
 	if ( Controller )
 	{
-		AddControllerYawInput( LookAxis.X );	// look left/right
-		AddControllerPitchInput( LookAxis.Y );  // look up/down
+		AddControllerYawInput( LookAxis.X ); // look left/right
+		AddControllerPitchInput( LookAxis.Y ); // look up/down
 	}
 }
 
 void AShooterCharacter::LookRate(FInputActionValue const& ActionValue)
 {
-	float	  const DeltaTime    = UGameplayStatics::GetWorldDeltaSeconds( this );
-	FVector2D const AxisValue    = ActionValue.Get<FVector2D>();
+	float const DeltaTime = UGameplayStatics::GetWorldDeltaSeconds( this );
+	FVector2D const AxisValue = ActionValue.Get< FVector2D >();
 	FVector2D const NewAxisValue = AxisValue * LookAxisRotationRate * DeltaTime;
 	Look( NewAxisValue );
 }
 
-void AShooterCharacter::FireGun() 
+void AShooterCharacter::FireGun()
 {
 	Gun->PullTrigger();
 }
