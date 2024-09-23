@@ -51,7 +51,7 @@ void AGun::PullTrigger()
 	FCollisionShape const CollisionShape = FCollisionShape::MakeSphere( HitRadius );
 	FVector const End = Location + Rotation.Vector() * Range;
 
-	bool const HasHit = GetWorld()->SweepSingleByChannel(
+	bool const bHasHit = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		Location,
 		End,
@@ -59,11 +59,12 @@ void AGun::PullTrigger()
 		ECC_GameTraceChannel1,
 		CollisionShape );
 
-	if ( HasHit )
+	if ( bHasHit )
 	{
 		if ( HitParticle )
 		{
-			UGameplayStatics::SpawnEmitterAtLocation( GetWorld(), HitParticle, HitResult.ImpactPoint, Rotation );
+			FRotator const ImpactRotation = Rotation * -1.0;
+			UGameplayStatics::SpawnEmitterAtLocation( GetWorld(), HitParticle, HitResult.ImpactPoint, ImpactRotation );
 		}
 	}
 
