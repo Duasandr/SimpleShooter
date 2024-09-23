@@ -3,8 +3,8 @@
 
 #include "Gun.h"
 
-#include "HairStrandsInterface.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -37,7 +37,7 @@ void AGun::Tick(float DeltaTime)
 void AGun::PullTrigger()
 {
 	APawn const* Owner = Cast< APawn >( GetOwner() );
-	AController const* Controller;
+	AController* Controller;
 	if ( !( Owner && ( ( Controller = Owner->GetController() ) ) ) )
 	{
 		return;
@@ -63,8 +63,16 @@ void AGun::PullTrigger()
 	{
 		if ( HitParticle )
 		{
-			FRotator const ImpactRotation = Rotation * -1.0;
-			UGameplayStatics::SpawnEmitterAtLocation( GetWorld(), HitParticle, HitResult.ImpactPoint, ImpactRotation );
+			FVector const ShotLocation{ HitResult.ImpactPoint };
+			FVector const ShotDirection{ Rotation.Vector() * -1.0f };
+			FRotator const ShotRotation{ ShotDirection.Rotation() };
+			UGameplayStatics::SpawnEmitterAtLocation( GetWorld(), HitParticle, ShotLocation, ShotRotation );
+
+			if ( AActor* HitActor = HitResult.GetActor() )
+			{
+				FPointDamageEvent DamageEvent( Damage, HitResult, ShotDirection, nullptr );
+				HitActor->TakeDamage( Damage, DamageEvent, Controller, this );
+			}
 		}
 	}
 
