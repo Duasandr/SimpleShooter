@@ -3,3 +3,14 @@
 
 #include "ShooterCharacterAIContoller.h"
 
+#include "Kismet/GameplayStatics.h"
+
+void AShooterCharacterAIContoller::BeginPlay()
+{
+	Super::BeginPlay();
+	APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
+	if (PlayerPawn)
+	{
+		SetFocus( PlayerPawn );
+	}
+}
