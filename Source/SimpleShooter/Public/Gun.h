@@ -38,7 +38,7 @@ private:
 	UPROPERTY( EditAnywhere, Category = "Combat", meta = (ClampMin = "1.0") )
 	float HitRadius = 1.0f;
 
-	UPROPERTY( EditAnywhere, Category = "Combat", meta = (ClampMin = "1.0") )
+	UPROPERTY( EditAnywhere, Category = "Combat", meta = (ClampMin = "0.01") )
 	float Damage = 1.0f;
 
 	UPROPERTY( EditAnywhere, Category = "Combat" )
