@@ -9,21 +9,25 @@ void AShooterCharacterAIContoller::TickTick(float DeltaTime)
 {
 	Super::Tick( DeltaTime );
 
-	APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
-	if (PlayerPawn && LineOfSightTo( PlayerPawn ))
-	{
-		SetFocus( PlayerPawn );
-		MoveToActor( PlayerPawn , AcceptanceRadius);
-	}
-	else
-	{
-		ClearFocus( EAIFocusPriority::Default );
-		StopMovement();
-	}
+	// APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
+	// if ( PlayerPawn && LineOfSightTo( PlayerPawn ) )
+	// {
+	// 	SetFocus( PlayerPawn );
+	// 	MoveToActor( PlayerPawn, AcceptanceRadius );
+	// }
+	// else
+	// {
+	// 	ClearFocus( EAIFocusPriority::Default );
+	// 	StopMovement();
+	// }
 }
 
 void AShooterCharacterAIContoller::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if ( BehaviorTree )
+	{
+		RunBehaviorTree( BehaviorTree );
+	}
 }
