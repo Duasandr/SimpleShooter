@@ -12,5 +12,9 @@ void AShooterCharacterAIContoller::BeginPlay()
 	if (PlayerPawn)
 	{
 		SetFocus( PlayerPawn );
+
+		// acceptance radius is the distance the AI controller stops before reaching the actor
+		constexpr float AcceptanceRadius = 100.0f;
+		MoveToActor( PlayerPawn , AcceptanceRadius);
 	}
 }
