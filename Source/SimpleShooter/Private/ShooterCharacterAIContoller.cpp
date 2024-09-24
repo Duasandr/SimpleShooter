@@ -5,16 +5,25 @@
 
 #include "Kismet/GameplayStatics.h"
 
+void AShooterCharacterAIContoller::TickTick(float DeltaTime)
+{
+	Super::Tick( DeltaTime );
+
+	APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
+	if (PlayerPawn && LineOfSightTo( PlayerPawn ))
+	{
+		SetFocus( PlayerPawn );
+		MoveToActor( PlayerPawn , AcceptanceRadius);
+	}
+	else
+	{
+		ClearFocus( EAIFocusPriority::Default );
+		StopMovement();
+	}
+}
+
 void AShooterCharacterAIContoller::BeginPlay()
 {
 	Super::BeginPlay();
-	APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
-	if (PlayerPawn)
-	{
-		SetFocus( PlayerPawn );
-
-		// acceptance radius is the distance the AI controller stops before reaching the actor
-		constexpr float AcceptanceRadius = 100.0f;
-		MoveToActor( PlayerPawn , AcceptanceRadius);
-	}
+	
 }
