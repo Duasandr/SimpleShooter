@@ -13,5 +13,6 @@ UCLASS()
 class SIMPLESHOOTER_API UBTTask_ClearBlackboardValue : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
-	
+public:
+	UBTTask_ClearBlackboardValue();
 };
