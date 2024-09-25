@@ -15,12 +15,12 @@ class SIMPLESHOOTER_API AShooterCharacterAIContoller : public AAIController
 	GENERATED_BODY()
 
 public:
-	void TickTick(float DeltaTime);
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY( EditAnywhere, Category = "AI" )
-	UBehaviorTree * BehaviorTree;	
+	UBehaviorTree* BehaviorTree;
 };
