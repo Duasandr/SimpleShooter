@@ -6,10 +6,9 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-void AShooterCharacterAIContoller::TickTick(float DeltaTime)
+void AShooterCharacterAIContoller::Tick(float DeltaTime)
 {
 	Super::Tick( DeltaTime );
-
 
 	// if ( PlayerPawn && LineOfSightTo( PlayerPawn ) )
 	// {
@@ -27,10 +26,12 @@ void AShooterCharacterAIContoller::BeginPlay()
 {
 	Super::BeginPlay();
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
-	
-	if ( BehaviorTree )
+	APawn* ControlledPawn = GetPawn();
+
+	if ( BehaviorTree && PlayerPawn && ControlledPawn )
 	{
 		RunBehaviorTree( BehaviorTree );
+		GetBlackboardComponent()->SetValueAsVector( TEXT( "StartLocation" ), ControlledPawn->GetActorLocation() );
 		GetBlackboardComponent()->SetValueAsVector( TEXT( "PlayerLocation" ), PlayerPawn->GetActorLocation() );
 	}
 }
