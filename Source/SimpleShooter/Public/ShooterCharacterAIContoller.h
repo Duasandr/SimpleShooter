@@ -14,9 +14,6 @@ class SIMPLESHOOTER_API AShooterCharacterAIContoller : public AAIController
 {
 	GENERATED_BODY()
 
-public:
-	virtual void Tick(float DeltaTime) override;
-
 protected:
 	virtual void BeginPlay() override;
 
