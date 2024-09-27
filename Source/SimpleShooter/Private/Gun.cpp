@@ -51,13 +51,18 @@ void AGun::PullTrigger()
 	FCollisionShape const CollisionShape = FCollisionShape::MakeSphere( HitRadius );
 	FVector const End = Location + Rotation.Vector() * Range;
 
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor( this );
+	CollisionParams.AddIgnoredActor( Owner );
+
 	bool const bHasHit = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		Location,
 		End,
 		FQuat::Identity,
 		ECC_GameTraceChannel1,
-		CollisionShape );
+		CollisionShape,
+		CollisionParams );
 
 	if ( bHasHit )
 	{
