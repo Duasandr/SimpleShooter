@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Gun.h"
+#include "SimpleShooterGameModeBase.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -88,6 +89,11 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 	{
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::Type::NoCollision );
+		ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode< ASimpleShooterGameModeBase >();
+		if ( GameMode )
+		{
+			GameMode->PawnKilled( this );
+		}
 	}
 
 	return DamageReceived;
