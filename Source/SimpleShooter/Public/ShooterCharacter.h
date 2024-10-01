@@ -30,7 +30,9 @@ public:
 
 	UFUNCTION( BlueprintPure )
 	FORCEINLINE bool IsDead() const { return Health <= 0.0f; }
-	
+
+	void FireGun();
+
 private:
 	UPROPERTY( EditDefaultsOnly, Category = "Gameplay|Enhanced Input" )
 	class UInputMappingContext* InputMappingContext;
@@ -72,6 +74,4 @@ private:
 	 * @param ActionValue Value passed by enhanced input
 	 */
 	void LookRate(FInputActionValue const& ActionValue);
-
-	void FireGun();
 };

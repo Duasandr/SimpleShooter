@@ -7,6 +7,8 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Gun.h"
+#include "SimpleShooterGameModeBase.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -77,11 +79,22 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
                                     class AController* EventInstigator, AActor* DamageCauser)
 {
 	float const DamageReceived = Super::TakeDamage( DamageAmount, DamageEvent, EventInstigator, DamageCauser );
-	float const DamageToApply = FMath::Min( Health , DamageReceived );
-	
+	float const DamageToApply = FMath::Min( Health, DamageReceived );
+
 	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Damage: %f"), DamageReceived);
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health)
+	UE_LOG( LogTemp, Warning, TEXT("Damage: %f"), DamageReceived );
+	UE_LOG( LogTemp, Warning, TEXT("Health: %f"), Health )
+
+	if ( IsDead() )
+	{
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::Type::NoCollision );
+		ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode< ASimpleShooterGameModeBase >();
+		if ( GameMode )
+		{
+			GameMode->PawnKilled( this );
+		}
+	}
 
 	return DamageReceived;
 }
