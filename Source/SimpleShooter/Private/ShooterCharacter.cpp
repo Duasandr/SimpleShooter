@@ -94,7 +94,7 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 		}
 
 		DetachFromControllerPendingDestroy();
-		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::Type::NoCollision );
+		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 	}
 
 	return DamageReceived;
