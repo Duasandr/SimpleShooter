@@ -3,6 +3,8 @@
 
 #include "KillEmAllGameMode.h"
 
+#include "EngineUtils.h"
+
 void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 {
 	Super::PawnKilled( PawnKilled );
@@ -10,6 +12,15 @@ void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 	if ( PlayerController )
 	{
 		// player died
-		PlayerController->GameHasEnded( nullptr, false );
+		EndGame( false );
+	}
+}
+
+void AKillEmAllGameMode::EndGame(bool const bIsPlayerWinner) const
+{
+	for ( AController* Controller : TActorRange< AController >( GetWorld() ) )
+	{
+		bool const bIsWinner = Controller->IsPlayerController() == bIsPlayerWinner;
+		Controller->GameHasEnded( Controller->GetPawn(), bIsWinner );
 	}
 }
