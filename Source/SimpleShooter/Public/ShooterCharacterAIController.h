@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "ShooterCharacterAIContoller.generated.h"
+#include "ShooterCharacterAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SIMPLESHOOTER_API AShooterCharacterAIContoller : public AAIController
+class SIMPLESHOOTER_API AShooterCharacterAIController : public AAIController
 {
 	GENERATED_BODY()
 

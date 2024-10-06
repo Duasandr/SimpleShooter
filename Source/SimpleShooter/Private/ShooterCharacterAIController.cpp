@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ShooterCharacterAIContoller.h"
+#include "ShooterCharacterAIController.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-void AShooterCharacterAIContoller::BeginPlay()
+void AShooterCharacterAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn( this, 0 );
