@@ -24,5 +24,8 @@ private:
 	FTimerHandle RestartTimer;
 
 	UPROPERTY( EditAnywhere )
-	TSubclassOf< class UUserWidget > LoseScreenWidgetClass;
+	TSubclassOf< UUserWidget > LoseScreenWidgetClass;
+
+	UPROPERTY( EditAnywhere )
+	TSubclassOf< UUserWidget > WinScreenWidgetClass;
 };

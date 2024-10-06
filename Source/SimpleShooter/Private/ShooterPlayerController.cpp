@@ -9,13 +9,19 @@ void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIs
 {
 	Super::GameHasEnded( EndGameFocus, bIsWinner );
 
-	// display lose widget
-	UUserWidget* LoseScreenWidget = CreateWidget( this, LoseScreenWidgetClass );
-	if ( LoseScreenWidget )
+	UUserWidget* EndScreenWidget;
+	if ( bIsWinner )
 	{
-		LoseScreenWidget->AddToViewport();
+		EndScreenWidget = CreateWidget( this, WinScreenWidgetClass );
+	}
+	else
+	{
+		EndScreenWidget = CreateWidget( this, LoseScreenWidgetClass );
 	}
 
+	// display the widget 
+	EndScreenWidget->AddToViewport();
+	
 	// restart the level after a delay
 	GetWorldTimerManager().SetTimer( RestartTimer, this, &APlayerController::RestartLevel, RestartDelay );
 }
