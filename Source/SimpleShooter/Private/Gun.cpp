@@ -36,36 +36,32 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
-	if ( MuzzleFlash )
-	{
-		UGameplayStatics::SpawnEmitterAttached( MuzzleFlash, SkeletalMesh, TEXT( "MuzzleFlashSocket" ) );
-	}
-	
 	FVector ShotDirection;
 	FHitResult HitResult;
 	bool const bHasHit = GunTrace( HitResult, ShotDirection );
 	if ( bHasHit )
 	{
-		if ( HitParticle )
+		FVector const ShotLocation{ HitResult.ImpactPoint };
+		FRotator const ShotRotation{ ShotDirection.Rotation() };
+
+		if ( HitParticle && MuzzleFlash && MuzzleSound && ImpactSound )
 		{
-			FVector const ShotLocation{ HitResult.ImpactPoint };
-			FRotator const ShotRotation{ ShotDirection.Rotation() };
-
 			UGameplayStatics::SpawnEmitterAtLocation( GetWorld(), HitParticle, ShotLocation, ShotRotation );
+			UGameplayStatics::SpawnEmitterAttached( MuzzleFlash, SkeletalMesh, TEXT( "MuzzleFlashSocket" ) );
+			UGameplayStatics::SpawnSoundAttached( MuzzleSound, SkeletalMesh, TEXT( "MuzzleFlashSocket" ) );
+			UGameplayStatics::PlaySoundAtLocation( this, ImpactSound, ShotLocation );
+		}
 
-			if ( AActor* HitActor = HitResult.GetActor() )
+		if ( AActor* HitActor = HitResult.GetActor() )
+		{
+			AController* Controller = GetController();
+			if ( Controller )
 			{
-				AController* Controller = GetController();
-				if ( Controller )
-				{
-					FPointDamageEvent DamageEvent( Damage, HitResult, ShotDirection, nullptr );
-					HitActor->TakeDamage( Damage, DamageEvent, Controller, this );
-				}
+				FPointDamageEvent DamageEvent( Damage, HitResult, ShotDirection, nullptr );
+				HitActor->TakeDamage( Damage, DamageEvent, Controller, this );
 			}
 		}
 	}
-
-	
 }
 
 bool AGun::GunTrace(FHitResult& HitResult, FVector& ShotDirection) const
