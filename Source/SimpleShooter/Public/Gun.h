@@ -46,4 +46,8 @@ private:
 
 	UPROPERTY( EditAnywhere, Category = "Combat" )
 	UParticleSystem* HitParticle;
+
+	bool GunTrace(FHitResult &HitResult, FVector &ShotDirection) const;
+	AController* GetController() const;
+	
 };
