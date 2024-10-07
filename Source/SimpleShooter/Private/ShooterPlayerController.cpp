@@ -5,6 +5,17 @@
 
 #include "Blueprint/UserWidget.h"
 
+void AShooterPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	HUD = CreateWidget( this, HUDClass );
+	if ( HUD )
+	{
+		HUD->AddToViewport();
+	}
+}
+
 void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded( EndGameFocus, bIsWinner );
@@ -19,9 +30,10 @@ void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIs
 		EndScreenWidget = CreateWidget( this, LoseScreenWidgetClass );
 	}
 
-	// display the widget 
+	HUD->RemoveFromParent();
+
 	EndScreenWidget->AddToViewport();
-	
+
 	// restart the level after a delay
 	GetWorldTimerManager().SetTimer( RestartTimer, this, &APlayerController::RestartLevel, RestartDelay );
 }
