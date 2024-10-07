@@ -22,10 +22,10 @@ void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 		// ai controller died
 
 		// check for the win condition (all AI controlled characters are dead) 
-		for ( AShooterCharacterAIController* Controller : TActorRange< AShooterCharacterAIController >( GetWorld() ) )
+		for ( AShooterCharacterAIController const* Controller : TActorRange< AShooterCharacterAIController >(
+			      GetWorld() ) )
 		{
-			AShooterCharacter const* Character = Cast< AShooterCharacter >( Controller->GetPawn() );
-			if ( Character && !Character->IsDead() )
+			if ( !Controller->IsDead() )
 			{
 				// at least an AI character is alive
 				return;
