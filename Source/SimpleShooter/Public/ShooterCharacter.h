@@ -31,6 +31,9 @@ public:
 	UFUNCTION( BlueprintPure )
 	FORCEINLINE bool IsDead() const { return Health <= 0.0f; }
 
+	UFUNCTION( BlueprintPure )
+	FORCEINLINE float GetHealthPercent() const { return Health / MaxHealth; }
+
 	void FireGun();
 
 private:

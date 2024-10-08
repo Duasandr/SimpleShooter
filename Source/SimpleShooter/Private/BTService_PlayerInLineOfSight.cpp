@@ -15,7 +15,7 @@ void UBTService_PlayerInLineOfSight::TickNode(UBehaviorTreeComponent& OwnerComp,
 {
 	Super::TickNode( OwnerComp, NodeMemory, DeltaSeconds );
 
-	APawn const* Pawn = UGameplayStatics::GetPlayerPawn( this, 0 );
+	APawn * Pawn = UGameplayStatics::GetPlayerPawn( this, 0 );
 	AAIController const* Controller = OwnerComp.GetAIOwner();
 	if ( !( Pawn && Controller ) )
 	{
@@ -25,8 +25,7 @@ void UBTService_PlayerInLineOfSight::TickNode(UBehaviorTreeComponent& OwnerComp,
 	FName const SelectedKey = GetSelectedBlackboardKey();
 	if ( Controller->LineOfSightTo( Pawn ) )
 	{
-		FVector const PawnLocation = Pawn->GetActorLocation();
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector( SelectedKey, PawnLocation );
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( SelectedKey, Pawn );
 	}
 	else
 	{
